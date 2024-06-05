@@ -45,8 +45,7 @@
               popular front-end open source toolkit, featuring Sass variables and mixins, responsive grid system,
               extensive prebuilt components, and powerful JavaScript plugins.</p>
             <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-              <button type="button" class="btn btn-primary btn-lg px-4 me-md-2">Primary</button>
-              <button type="button" class="btn btn-outline-secondary btn-lg px-4">Default</button>
+              <a href="pages/user/create-booking.php"><button type="button" class="btn btn-warning btn-lg px-4 me-md-2">Book Now!</button></a>
             </div>
           </div>
         </div>

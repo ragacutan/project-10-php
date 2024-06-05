@@ -64,7 +64,8 @@ if (isset($_POST["submit"])) {
       </div>
 
       <button class="w-100 btn btn-lg btn-primary" type="submit" name="submit">Sign Up</button>
-      <p class="mt-5 mb-3 text-muted">&copy; 2024</p>
+      <p class="mt-3 mb-3 text-muted">Already Have An Account? <a href="login.php">Login Here</a></p>
+      <p class="mt-1 mb-3 text-muted">Go Back? <a href="../../index.php">Click Here</a></p>
     </form>
   </main>
 </body>

@@ -57,7 +57,8 @@ function save_registration($fname, $lname, $address, $contact_number, $email, $p
     global $connection;
     $users = [];
 
-    $query = "INSERT INTO `users` (`fname`, `lname`, `address`, `contact_number`, `email`, `password`) VALUES ('" . escape_string($fname) . "','" . escape_string($lname) . "','" . escape_string($address) . "', '". escape_string($contact_number) ."','" . escape_string($email) . "', '" . escape_string($password) . "')";
+    $account_type = 'user';
+    $query = "INSERT INTO `users` (`fname`, `lname`, `address`, `contact_number`, `email`, `password`, `account_type`) VALUES ('" . escape_string($fname) . "','" . escape_string($lname) . "','" . escape_string($address) . "', '". escape_string($contact_number) ."','" . escape_string($email) . "', '" . escape_string($password) . "', '" .$account_type."')";
     if (mysqli_query($connection, $query)) {
         $id = mysqli_insert_id($connection);
         $encrypted_password = md5(md5($id . $password)); //convert password to hash
@@ -76,4 +77,42 @@ function save_registration($fname, $lname, $address, $contact_number, $email, $p
         }
     }
     return $users;
+}
+
+function validate_login_request($email, $password){
+    $validation_errors = [];
+
+    if (!$_POST['email']) {
+        $validation_errors[] = "Email is Required.";
+    }
+
+    if (!$_POST['password']) {
+        $validation_errors[] = "Password is Required.";
+    }
+
+    return $validation_errors;
+}
+
+function login_account($email, $password)
+{
+    global $connection;
+    $user = [];
+
+    $query = "SELECT * FROM `users` WHERE `users`.`email`='" . escape_string($email) . "' LIMIT 1";
+    $result = mysqli_query($connection, $query);
+    $row = mysqli_fetch_array($result);
+
+    if (!empty($row)) {
+        $hash_password = md5(md5($row['id'] . $password));
+        if ($hash_password == $row['password']) {
+            $user = [
+                "id" => $row['id'],
+                "fname" => $row['fname'],
+                "lname" => $row['lname'],
+                "email" => $row['email']
+            ];
+        }
+    }
+
+    return $user;
 }
