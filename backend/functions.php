@@ -116,3 +116,54 @@ function login_account($email, $password)
 
     return $user;
 }
+
+function get_categories()
+{
+    global $connection;
+    $categories = [];
+    $query = "SELECT * FROM `categories`";
+    $result = mysqli_query($connection, $query);
+
+    if (mysqli_num_rows($result) > 0) {
+        $categories = $result;
+    }
+
+    return $categories;
+}
+
+
+
+function create_booking($user_id, $category_id, $date, $time, $remarks)
+{
+    global $connection;
+    $flag = false;
+
+    $date_created = date("Y-m-d H:i:s");
+    $query = "INSERT INTO `bookings` (`user_id`, `category_id`, `date`, `time`, `remarks`, `date_created`) VALUES ('" . mysqli_real_escape_string($connection, $user_id) . "', '" . mysqli_real_escape_string($connection, $category_id) . "', '" . mysqli_real_escape_string($connection, $date) . "', '" . mysqli_real_escape_string($connection, $time) . "', '" . mysqli_real_escape_string($connection, $remarks) . "', '" . $date_created . "')";
+
+    if (mysqli_query($connection, $query)) {
+        $flag = true;
+    }
+    
+    // echo("Error description: " . mysqli_error($connection));
+    return $flag;
+}
+
+function get_my_booking($user_id) {
+    global $connection;
+    $my_bookings = [];
+
+    $query = "SELECT `b`.`id` as `booking_id`, `b`.`date`, `b`.`time`, `c`.`category_name`, `b`.`remarks`,`b`.`date_created` FROM `bookings` as `b` INNER JOIN `categories` as `c` ON `c`.`id` = `b`.`category_id` WHERE `user_id` = '".mysqli_real_escape_string($connection, $user_id)."' ORDER BY `b`.`id` DESC";
+    $result = mysqli_query($connection, $query);
+
+    if (mysqli_num_rows($result) > 0) {
+       $my_bookings = $result;
+    } 
+
+    return $my_bookings;
+}
+
+function display_booking_preview($field, $length)
+{
+    return substr($field, 0, $length);
+}

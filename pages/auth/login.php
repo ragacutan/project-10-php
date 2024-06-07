@@ -11,12 +11,12 @@ if (isset($_POST["submit"])) {
 
   $errors = validate_login_request($_POST['email'], $_POST['password']);
 
-  global $connection;
+    global $connection;
     $sql = "SELECT * FROM users WHERE email = '".$_POST['email']."'";
     $result = mysqli_query($connection, $sql);
 
     $user = mysqli_fetch_object($result);
-    if($user-> email == null){
+    if($user->email == null){
         $errors[] = "Email Not Found";
     }
     

@@ -4,15 +4,21 @@ include '../../backend/functions.php';
 include '../../backend/session.php';
 include '../../backend/check_session.php';
 
-echo '<title>Create Booking </title>';
+echo '<title>Create Booking</title>';
 
-// echo $_SESSION["id"];
+$categories = get_categories();
 
-// if (!empty($_SESSION["id"])) {
-//   $id = $_SESSION["id"];
-//   $result = mysqli_query($connection, "SELECT * FROM users WHERE id = $id");
-//   $row = mysqli_fetch_assoc($result);
-// }
+if (isset($_POST['submit'])) {
+	if (empty($errors)) {
+		$save_material = create_booking( $_SESSION['id'],$_POST['category_id'], $_POST['date'], $_POST['time'], $_POST['remarks']);
+		if ($save_material) {
+			header("Location: my-bookings.php");
+		} else {
+			$errors[] = "Could not create a blog post. Please try again later.";
+		}
+	}
+}
+
 
 ?>
 <?php include '../../layouts/_layout_main_header.php' ?>
@@ -48,11 +54,16 @@ echo '<title>Create Booking </title>';
         <div class="col-md-10 mx-auto col-lg-5">
           <form class="p-4 p-md-5 border rounded-3 bg-light" method="post">
             <div class="form-floating mb-3">
-              <select type="text" class="form-control" id="floatingInput" name="category" value="">
-                <option value="">Solo</option>
-                <option value="">Date</option>
-                <option value="">Family and Friends</option>
-              </select>
+              <select type="text" class="form-control" id="floatingInput" name="category_id" value="">
+                <option value="">--- Select Category ---</option>
+									<?php if (!empty($categories)) { ?>
+										<?php foreach ($categories as $row) { ?>
+											<option value="<?= $row['id'] ?>" <?= ($row['id'] == 'category_id') ? 'selected' : '' ?>>
+												<?= $row['category_name'] ?>
+											</option>
+										<?php } ?>
+									<?php } ?>
+                </select>
               <label for="floatingInput">Booking Category</label>
             </div>
             <div class="form-floating mb-3">

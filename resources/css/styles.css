@@ -15,7 +15,7 @@ header > .container > .d-flex > a > h3{
   background-blend-mode: overlay;
   background-size: cover;
   background-repeat: no-repeat;
-  height: 80vh;
+  height: fit-content;
 }
 
 .col-lg-6 > .display-5{

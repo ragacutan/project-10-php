@@ -7,9 +7,6 @@ include '../../backend/check_session.php';
 echo '<title>Update Profile</title>';
 
 
-
-
-
 if (isset($_GET['id'])) {
   $id = $_GET['id'];
 
