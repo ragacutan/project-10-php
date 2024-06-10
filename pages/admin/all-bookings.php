@@ -4,9 +4,9 @@ include '../../backend/functions.php';
 include '../../backend/session.php';
 include '../../backend/check_session.php';
 
-$my_bookings = get_my_booking($_SESSION['id']);
+$all_bookings = get_all_booking();
 
-echo '<title>My Bookings</title>';
+echo '<title>All Bookings</title>';
 
 if (isset($_GET['id'])) {
 
@@ -14,7 +14,7 @@ if (isset($_GET['id'])) {
 
   $query = "DELETE FROM  `bookings` WHERE `id` = '$id'";
   if (mysqli_query($connection, $query)) {
-      header("Location: my-bookings.php");
+      header("Location: all-bookings.php");
   }
 }
 ?>
@@ -32,10 +32,10 @@ if (isset($_GET['id'])) {
         </a>
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
           <li><a href="index.php" class="nav-link px-2 text-white">Home</a></li>
-          <li><a href="my-bookings.php" class="nav-link px-2 text-secondary">My Bookings</a></li>
+          <li><a href="all-bookings.php" class="nav-link px-2 text-secondary">All Bookings</a></li>
+          <li><a href="all-users.php" class="nav-link px-2 text-white">All Users</a></li>
         </ul>
         <div class="text-end">
-          <a href="profile.php"><button type="button" class="btn btn-warning">Profile</button></a>
           <a href="../../backend/logout.php?logout=true"><button type="button"
               class="btn btn-outline-light me-2">Logout</button></a>
         </div>
@@ -47,31 +47,36 @@ if (isset($_GET['id'])) {
       <div class="album py-5">
         <div class="container">
           <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-            <?php if (!empty($my_bookings)) { ?>
-              <?php foreach ($my_bookings as $row) { ?>
+            <?php if (!empty($all_bookings)) { ?>
+              <?php foreach ($all_bookings as $row) { ?>
                 <div class="col">
                   <div class="card shadow-sm">
                     <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
                       xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
                       preserveAspectRatio="xMidYMid slice" focusable="false">
                       <title>Placeholder</title>
+                      <rect width="100%" height="100%" fill="#55595c" /><text x="50%" y="50%" fill="#eceeef"
+                        dy=".3em"></text>
                     </svg>
                     <div class="card-body">
-                      <p> <span class="fw-bold"> Booking Category: </span><?= $row['category_name']?></p>
+                      <p> <span class="fw-bold"> Name of Booker: </span><?= $row['fname'] ?> <?= $row['lname'] ?></p>
+                      <p> <span class="fw-bold"> Contact Number: </span><?= $row['contact_number'] ?></p>
+                      <p> <span class="fw-bold"> Booking Category: </span><?= $row['category_name'] ?></p>
                       <p> <span class="fw-bold"> Date Booked: </span><?= date("F m, Y @ g:H a", strtotime($row['date_created'])); ?></p>
                       <p> <span class="fw-bold"> Scheduled Booked: </span><?= date("F m, Y", strtotime($row['date'])); ?> @ <?= $row['time']?></p>
                       <p class="card-text fw-bold">REMARKS:</p>
                       <p class="card-text"><?= $row['remarks'] ?></p>
                       <div class="d-flex justify-content-between align-items-center">
                         <div class="btn-group">
-                          <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                          <a  class="btn btn-sm btn-outline-secondary"  href="my-bookings.php?id=<?= $row['booking_id']?>"><i class='dw dw-delete-3'></i> Delete</a>
+                          <a  class="btn btn-sm btn-outline-secondary"  href="all-bookings.php?id=<?= $row['booking_id']?>"><i class='dw dw-delete-3'></i> Delete</a>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               <?php } ?>
+              <?php } else {?>
+                <p class="text-alert">No Booking as of the moment</p>
             <?php } ?>
           </div>
         </div>
